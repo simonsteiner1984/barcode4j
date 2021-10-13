@@ -160,7 +160,7 @@ public class QRCodeBean extends AbstractBarcodeBean {
 
         QRLogicImpl impl = new QRLogicImpl();
         impl.generateBarcodeLogic(handler, msg, encoding, errorCorrectionLevel,
-                getMinSize(), getMaxSize());
+                getMinSize(), getMaxSize(), canvas, swissCross);
     }
 
     /** {@inheritDoc} */

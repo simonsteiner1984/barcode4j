@@ -53,6 +53,8 @@ public interface CanvasProvider {
      * @param h the height
      */
     void deviceFillRect(double x, double y, double w, double h);
+
+    void deviceFillRectWhite(double x, double y, double w, double h);
     
     /**
      * Draws justified text.

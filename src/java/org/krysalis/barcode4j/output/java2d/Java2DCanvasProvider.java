@@ -16,6 +16,7 @@
 package org.krysalis.barcode4j.output.java2d;
 
 import java.awt.BasicStroke;
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.font.FontRenderContext;
@@ -190,4 +191,9 @@ public class Java2DCanvasProvider extends AbstractCanvasProvider {
         }
     }
 
+    public void deviceFillRectWhite(double x, double y, double w, double h) {
+        g2d.setColor(Color.WHITE);
+        g2d.fill(new Rectangle2D.Double(x, y, w, h));
+        g2d.setColor(Color.BLACK);
+    }
 }

@@ -69,4 +69,6 @@ public abstract class AbstractCanvasProvider implements CanvasProvider {
         deviceText(text, x1, x2, y1, fontName, fontSize, TextAlignment.TA_CENTER);
     }
 
+    public void deviceFillRectWhite(double x, double y, double w, double h) {
+    }
 }

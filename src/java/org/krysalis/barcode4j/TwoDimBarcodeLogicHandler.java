@@ -34,5 +34,8 @@ public interface TwoDimBarcodeLogicHandler extends ClassicBarcodeLogicHandler {
      * Signals the end of a row in the barcode.
      */
     void endRow();
-    
+
+    double getBarWidth();
+
+    double getStartX();
 }

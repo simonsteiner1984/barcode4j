@@ -21,6 +21,7 @@ package org.krysalis.barcode4j.impl.qr;
 import java.awt.Dimension;
 import java.util.Hashtable;
 
+import org.krysalis.barcode4j.output.CanvasProvider;
 import org.krysalis.barcode4j.TwoDimBarcodeLogicHandler;
 
 import com.google.zxing.EncodeHintType;
@@ -49,7 +50,7 @@ public class QRLogicImpl implements QRConstants {
     public void generateBarcodeLogic(TwoDimBarcodeLogicHandler logic, String msg,
             String encoding,
             char errorCorrectionLevel,
-            Dimension minSize, Dimension maxSize) {
+            Dimension minSize, Dimension maxSize, CanvasProvider canvas, boolean swissCross) {
 
         //TODO ZXing doesn't allow to set minSize/maxSize through its API
 
@@ -66,7 +67,7 @@ public class QRLogicImpl implements QRConstants {
 
         //finally, paint the barcode
         logic.startBarcode(msg, msg);
-        encodeLowLevel(logic, matrix);
+        encodeLowLevel(logic, matrix, canvas, swissCross);
         logic.endBarcode();
     }
 
@@ -101,7 +102,11 @@ public class QRLogicImpl implements QRConstants {
         return zxingErrLevel;
     }
 
-    private void encodeLowLevel(TwoDimBarcodeLogicHandler logic, ByteMatrix matrix) {
+    private void encodeLowLevel(TwoDimBarcodeLogicHandler logic, ByteMatrix matrix, CanvasProvider canvas, boolean swissCross) {
+        if (swissCross) {
+            clearSwissCrossArea(matrix);
+        }
+
         int symbolWidth = matrix.getWidth();
         int symbolHeight = matrix.getHeight();
         for (int y = 0; y < symbolHeight; y++) {
@@ -111,6 +116,37 @@ public class QRLogicImpl implements QRConstants {
             }
             logic.endRow();
         }
+
+        if (swissCross) {
+            drawSwissCross(canvas, matrix, logic);
+        }
     }
 
+    private static void clearSwissCrossArea(ByteMatrix modules) {
+        // The Swiss cross area is supposed to be 7 by 7 mm in the center of
+        // the QR code, which is 46 by 46 mm.
+        // We clear sufficient modules to make room for the cross.
+        int size = modules.getHeight();
+        int start = (int) Math.floor((size - 6.8) / 2);
+        clearRectangle(modules, start, start, size - 2 * start, size - 2 * start);
+    }
+
+    private static void clearRectangle(ByteMatrix modules, int x, int y, int width, int height) {
+        for (int iy = y; iy < y + height; iy++) {
+            for (int ix = x; ix < x + width; ix++) {
+                modules.set(ix, iy, false);
+            }
+        }
+    }
+
+    private void drawSwissCross(CanvasProvider graphics, ByteMatrix modules, TwoDimBarcodeLogicHandler logic) {
+        double barWidth = logic.getBarWidth();
+        double start = logic.getStartX() + (((modules.getHeight() - 6) * barWidth)) / 2;
+        graphics.deviceFillRect(start, start, 6 * barWidth, 6 * barWidth);
+        double crossBarWidth = (7 / 6.0) * barWidth;
+        double barLen = (35 / 9.0) * barWidth;
+        start += 3 * barWidth;
+        graphics.deviceFillRectWhite(start - crossBarWidth / 2, start - barLen / 2, crossBarWidth, barLen);
+        graphics.deviceFillRectWhite(start - barLen / 2, start - crossBarWidth / 2, barLen, crossBarWidth);
+    }
 }

@@ -158,6 +158,8 @@ public abstract class ConfigurableBarcodeGenerator
             }
 
             getBean().setFontName(cfg.getChild("human-readable-font").getValue("Helvetica"));
+
+            getBean().swissCross = cfg.getChild("swiss-cross").getValueAsBoolean(false);
         }
     }
 

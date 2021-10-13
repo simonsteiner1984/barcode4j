@@ -43,7 +43,7 @@ public class DefaultTwoDimCanvasLogicHandler implements TwoDimBarcodeLogicHandle
         this.canvas = canvas;
     }
     
-    private double getStartX() {
+    public double getStartX() {
         if (bcBean.hasQuietZone()) {
             return bcBean.getQuietZone();
         } else {
@@ -102,5 +102,8 @@ public class DefaultTwoDimCanvasLogicHandler implements TwoDimBarcodeLogicHandle
         //nop
     }
 
+    public double getBarWidth() {
+        return bcBean.getBarWidth(1);
+    }
 }
 

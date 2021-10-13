@@ -203,6 +203,16 @@ public class EPSCanvasProvider extends AbstractCanvasProvider {
         }
     }
 
+    public void deviceFillRectWhite(double x, double y, double w, double h) {
+        try {
+            writer.write("1 setgray\n");
+            deviceFillRect(x, y, w, h);
+            writer.write("0 setgray\n");
+        } catch (IOException e) {
+            firstError = e;
+        }
+    }
+
     /** {@inheritDoc} */
     public void deviceText(
                 String text,

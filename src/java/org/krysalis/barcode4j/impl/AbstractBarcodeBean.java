@@ -47,6 +47,7 @@ public abstract class AbstractBarcodeBean
     protected Double quietZoneVertical;
     /** pattern to be applied over the human readable message */
     protected String pattern;
+    protected boolean swissCross;
 
     /**
      * returns the pattern to be applied over the human readable message
